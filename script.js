@@ -1,6 +1,7 @@
-const $quote = document.querySelector("#quote");
-const $author = document.querySelector("#author");
-const $newQuoteButton = document.querySelector("#new-quote");
+const $quoteText = document.getElementById("quote");
+const $authorText = document.getElementById("author");
+const $newQuoteBtn = document.getElementById("new-quote");
+const $twitterBtn = document.getElementById("twitter");
 
 let apiQuotes = [];
 
@@ -21,16 +22,35 @@ const newQuote = (q) => {
 };
 
 const setQuote = (q) => {
-  $quote.textContent = q.text;
-  if (q.author === null) {
-    $author.textContent = "unknown";
+  if (q.text.length > 100) {
+    $quoteText.classList.add("long-quote");
   } else {
-    $author.textContent = q.author;
+    $quoteText.classList.remove("long-quote");
+  }
+
+  $quoteText.textContent = q.text;
+
+  if (!q.author) {
+    $authorText.textContent = "unknown";
+  } else {
+    $authorText.textContent = q.author;
   }
 };
 
-getQuotes();
+const tweetQuote = () => {
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${$quoteText.textContent} -${$authorText.textContent}`;
 
-$newQuoteButton.addEventListener("click", (e) => {
+  window.open(twitterUrl, "_blank");
+};
+
+// Event Listeners
+
+$newQuoteBtn.addEventListener("click", (e) => {
   setQuote(newQuote(apiQuotes));
 });
+
+$twitterBtn.addEventListener("click", tweetQuote);
+
+// On Load
+
+getQuotes();
