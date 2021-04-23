@@ -6,16 +6,18 @@ const $loader = document.getElementById("loader");
 const $quoteContainer = document.getElementById("quote-container");
 
 let apiQuotes = [];
+let oneExecution = false;
 
-function showLoadingSpinner() {
+const showLoadingSpinner = () => {
   $loader.hidden = false;
   $quoteContainer.hidden = true;
-}
+};
 
-function removeLoadingSpinner() {
+const removeLoadingSpinner = () => {
   $loader.hidden = true;
   $quoteContainer.hidden = false;
-}
+  oneExecution = true;
+};
 
 async function getQuotes() {
   showLoadingSpinner();
@@ -48,14 +50,13 @@ const setQuote = (q) => {
   } else {
     $authorText.textContent = q.author;
   }
-  removeLoadingSpinner();
+  if (!oneExecution) removeLoadingSpinner();
 };
 
 // Tweet Quote Function
 
 const tweetQuote = () => {
   const twitterUrl = `https://twitter.com/intent/tweet?text=${$quoteText.textContent} -${$authorText.textContent}`;
-
   window.open(twitterUrl, "_blank");
 };
 
